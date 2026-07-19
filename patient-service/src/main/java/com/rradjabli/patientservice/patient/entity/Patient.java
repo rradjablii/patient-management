@@ -1,6 +1,5 @@
 package com.rradjabli.patientservice.patient.entity;
 
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -29,10 +28,10 @@ public class Patient {
     private String address;
 
     @Column(nullable = false)
-    private LocalDate birthDate;
+    private LocalDate dateOfBirth;
 
     @Column(nullable = false)
-    private LocalDate registerDate;
+    private LocalDate registeredDate;
 
     //getters & setters
 
@@ -68,20 +67,20 @@ public class Patient {
         this.address = address;
     }
 
-    public LocalDate getBirthDate() {
-        return birthDate;
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
     }
 
-    public void setBirthDate(LocalDate birthDate) {
-        this.birthDate = birthDate;
+    public void setDateOfBirth(LocalDate birthDate) {
+        this.dateOfBirth = birthDate;
     }
 
-    public LocalDate getRegisterDate() {
-        return registerDate;
+    public LocalDate getRegisteredDate() {
+        return registeredDate;
     }
 
-    public void setRegisterDate(LocalDate registerDate) {
-        this.registerDate = registerDate;
+    public void setRegisteredDate(LocalDate registerDate) {
+        this.registeredDate = registerDate;
     }
 
 }

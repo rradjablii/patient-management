@@ -1,0 +1,11 @@
+### save new patient
+POST http://localhost:4000/api/v1/patients
+Content-Type: application/json
+
+{
+  "name": "sakal ebalnik",
+  "email": "blyat@gmail.com",
+  "address": "Alma Bagi, zaprafkanin arxasinda",
+  "dateOfBirth": "2005-05-04",
+  "dateOfRegistration": "2026-09-09"
+}
