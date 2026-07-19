@@ -10,7 +10,6 @@ import com.rradjabli.patientservice.patient.mapper.PatientMapper;
 import com.rradjabli.patientservice.patient.repository.PatientRepository;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -39,7 +38,8 @@ public class PatientService {
 
     public PatientResponseDTO updatePatient(UUID id, UpdatePatientRequestDTO patientRequestDTO){
         Patient patient = patientRepository.findById(id).orElseThrow(()-> new PatientNotFoundException(id));
-        if(patientRepository.existsByEmail(patientRequestDTO.getEmail())){throw new EmailAlreadyExistsException(patientRequestDTO.getEmail());}
+
+        if(!patient.getEmail().equals(patientRequestDTO.getEmail()) && patientRepository.existsByEmail(patientRequestDTO.getEmail())){throw new EmailAlreadyExistsException(patientRequestDTO.getEmail());}
         patient.setName(patientRequestDTO.getName());
         patient.setEmail(patientRequestDTO.getEmail());
         patient.setAddress(patientRequestDTO.getAddress());
