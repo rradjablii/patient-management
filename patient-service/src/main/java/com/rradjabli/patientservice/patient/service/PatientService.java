@@ -47,4 +47,9 @@ public class PatientService {
         return PatientMapper.toPatientResponseDTO(updatedPatient);
     }
 
+    public void deletePatient(UUID id){
+        if(!patientRepository.existsById(id)){throw new PatientNotFoundException(id);}
+        patientRepository.deleteById(id);
+    }
+
 }

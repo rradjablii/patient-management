@@ -6,6 +6,7 @@ import com.rradjabli.patientservice.patient.dto.UpdatePatientRequestDTO;
 import com.rradjabli.patientservice.patient.service.PatientService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +37,12 @@ public class PatientController {
     public ResponseEntity<PatientResponseDTO> updatePatient(@PathVariable UUID id,
                                                 @Valid @RequestBody UpdatePatientRequestDTO patientRequestDTO){
         return ResponseEntity.ok().body(patientService.updatePatient(id, patientRequestDTO));
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<Void> deletePatient(@PathVariable UUID id){
+        patientService.deletePatient(id);
+        return ResponseEntity.noContent().build();
     }
 
 }
