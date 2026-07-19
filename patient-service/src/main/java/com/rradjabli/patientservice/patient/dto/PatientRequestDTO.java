@@ -2,6 +2,7 @@ package com.rradjabli.patientservice.patient.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.rradjabli.patientservice.patient.validation.annotation.Adult;
+import com.rradjabli.patientservice.patient.validation.annotation.UniqueEmail;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -19,6 +20,7 @@ public class PatientRequestDTO
 
     @NotBlank
     @Email(message="invalid email")
+    @UniqueEmail
     private String email;
 
     @NotBlank
@@ -29,7 +31,7 @@ public class PatientRequestDTO
     @NotBlank(message = "date of birth is a required field")
     private String dateOfBirth;
 
-    @JsonFormat(pattern = "yyyy-mm-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @NotNull(message = "date of registration is a required field")
     private String dateOfRegistration;
 }
