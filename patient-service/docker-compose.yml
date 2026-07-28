@@ -1,0 +1,31 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: patient-postgres
+    environment:
+      POSTGRES_DB: patientdb
+      POSTGRES_USER: patient
+      POSTGRES_PASSWORD: patient
+    volumes:
+      - patient-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U patient -d patientdb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  patient-service:
+    build: .
+    container_name: patient-service
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/patientdb
+      SPRING_DATASOURCE_USERNAME: patient
+      SPRING_DATASOURCE_PASSWORD: patient
+    ports:
+      - "4000:4000"
+
+volumes:
+  patient-postgres-data:
