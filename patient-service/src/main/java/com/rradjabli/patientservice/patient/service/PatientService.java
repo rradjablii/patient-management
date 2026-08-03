@@ -2,6 +2,7 @@ package com.rradjabli.patientservice.patient.service;
 
 import com.rradjabli.patientservice.exception.EmailAlreadyExistsException;
 import com.rradjabli.patientservice.exception.PatientNotFoundException;
+import com.rradjabli.patientservice.grpc.BillingServiceGrpcClient;
 import com.rradjabli.patientservice.patient.dto.PatientRequestDTO;
 import com.rradjabli.patientservice.patient.dto.PatientResponseDTO;
 import com.rradjabli.patientservice.patient.dto.UpdatePatientRequestDTO;
@@ -17,9 +18,11 @@ import java.util.UUID;
 public class PatientService {
 
     private final PatientRepository patientRepository;
+    private final BillingServiceGrpcClient billingServiceGrpcClient;
 
-    public PatientService(PatientRepository patientRepository){
+    public PatientService(PatientRepository patientRepository, BillingServiceGrpcClient billingServiceGrpcClient){
         this.patientRepository = patientRepository;
+        this.billingServiceGrpcClient = billingServiceGrpcClient;
     }
 
     public List<PatientResponseDTO> getPatients (){
@@ -33,6 +36,9 @@ public class PatientService {
     public PatientResponseDTO savePatient(PatientRequestDTO patientRequestDTO){
         Patient patient = PatientMapper.toPatient(patientRequestDTO);
         patientRepository.save(patient);
+
+        billingServiceGrpcClient.createBillingAccount(patient.getId().toString(), patient.getName(), patient.getEmail());
+
         return PatientMapper.toPatientResponseDTO(patient);
     }
 

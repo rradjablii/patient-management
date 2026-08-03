@@ -13,13 +13,24 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-
+  
+  billing-service:
+    build:
+      context: ./billing-service
+    container_name: billing-service
+    ports:
+      - "4001:4001"
+      - "9001:9001"
+        
   patient-service:
-    build: .
+    build:
+      context: ./patient-service
     container_name: patient-service
     depends_on:
       postgres:
         condition: service_healthy
+      billing-service:
+        condition: service_started
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/patientdb
       SPRING_DATASOURCE_USERNAME: patient

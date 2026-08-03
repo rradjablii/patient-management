@@ -1,5 +1,7 @@
 package com.rradjabli.patientservice.grpc;
 
+import billing.BillingRequest;
+import billing.BillingResponse;
 import billing.BillingServiceGrpc;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
@@ -18,8 +20,15 @@ public class BillingServiceGrpcClient {
             @Value("${billing.service.grpc.port:9001}") int serverPort
     ) {
         log.info("Some client side hustle happening at {}:{}", address, serverPort);
-        ManagedChannel channelBuilder = ManagedChannelBuilder.forAddress(address, serverPort).usePlaintext().build();
-        blockingStub = BillingServiceGrpc.newBlockingStub(channelBuilder);
+        ManagedChannel channel = ManagedChannelBuilder.forAddress(address, serverPort).usePlaintext().build();
+        blockingStub = BillingServiceGrpc.newBlockingStub(channel);
+    }
+
+    public BillingResponse createBillingAccount(String patientId, String name, String email){
+        BillingRequest request = BillingRequest.newBuilder().setPatientId(patientId).setName(name).setEmail(email).build();
+        BillingResponse response = blockingStub.createBillingAccount(request);
+        log.info("Billing account created: {}", response.toString());
+        return response;
     }
 
 }
