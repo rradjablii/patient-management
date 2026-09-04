@@ -3,6 +3,7 @@ package com.rradjabli.patientservice.patient.service;
 import com.rradjabli.patientservice.exception.EmailAlreadyExistsException;
 import com.rradjabli.patientservice.exception.PatientNotFoundException;
 import com.rradjabli.patientservice.grpc.BillingServiceGrpcClient;
+import com.rradjabli.patientservice.kafka.KafkaProducer;
 import com.rradjabli.patientservice.patient.dto.PatientRequestDTO;
 import com.rradjabli.patientservice.patient.dto.PatientResponseDTO;
 import com.rradjabli.patientservice.patient.dto.UpdatePatientRequestDTO;
@@ -19,10 +20,12 @@ public class PatientService {
 
     private final PatientRepository patientRepository;
     private final BillingServiceGrpcClient billingServiceGrpcClient;
+    private final KafkaProducer kafkaProducer;
 
-    public PatientService(PatientRepository patientRepository, BillingServiceGrpcClient billingServiceGrpcClient){
+    public PatientService(PatientRepository patientRepository, BillingServiceGrpcClient billingServiceGrpcClient, KafkaProducer kafkaProducer){
         this.patientRepository = patientRepository;
         this.billingServiceGrpcClient = billingServiceGrpcClient;
+        this.kafkaProducer = kafkaProducer;
     }
 
     public List<PatientResponseDTO> getPatients (){
@@ -38,6 +41,8 @@ public class PatientService {
         patientRepository.save(patient);
 
         billingServiceGrpcClient.createBillingAccount(patient.getId().toString(), patient.getName(), patient.getEmail());
+
+        kafkaProducer.sendEvent(patient);
 
         return PatientMapper.toPatientResponseDTO(patient);
     }
