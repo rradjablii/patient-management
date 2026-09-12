@@ -89,6 +89,13 @@ services:
     environment:
       SPRING_KAFKA_BOOTSTRAP-SERVERS: kafka:9092
 
+  api-gateway:
+    build:
+      context: ./api-gateway
+    container_name: api-gateway
+    ports:
+      - "4003:4003"
+
 volumes:
   patient-postgres-data:
   kafka-data:

@@ -1,0 +1,6 @@
+services:
+  api-gateway:
+    build: .
+    container_name: api-gateway
+    ports:
+      - "4003:4003"
