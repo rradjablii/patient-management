@@ -93,6 +93,9 @@ services:
     build:
       context: ./api-gateway
     container_name: api-gateway
+    depends_on:
+      patient-service:
+        condition: service_started
     ports:
       - "4003:4003"
 

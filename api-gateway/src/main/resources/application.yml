@@ -6,10 +6,12 @@ spring:
     name: api-gateway
   cloud:
     gateway:
-      routes:
-        - id: patient-service-route
-          uri: lb://patient-service:4000
-          predicates:
-            - Path=/api/v1/patients/**
-          filters:
-            - strip-perfix=2
+      server:
+        webflux:
+          routes:
+            - id: patient-service-route
+              uri: http://patient-service:4000
+              predicates:
+                - Path=/api/v1/patients/**
+              filters:
+                - RewritePath=/api-docs/v1/patients, /v3/api-docs/patient-service
