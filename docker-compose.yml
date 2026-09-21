@@ -14,6 +14,23 @@ services:
       timeout: 5s
       retries: 5
 
+  auth-postgres:
+    image: postgres:16-alpine
+    container_name: auth-postgres
+    environment:
+      POSTGRES_DB: authdb
+      POSTGRES_USER: auth
+      POSTGRES_PASSWORD: auth
+    volumes:
+      - auth-postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U auth -d authdb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   kafka:
     image: apache/kafka:3.9.0
     container_name: kafka
@@ -51,7 +68,22 @@ services:
     ports:
       - "4001:4001"
       - "9001:9001"
-        
+
+  auth-service:
+    build:
+      context: ./auth-service
+    container_name: auth-service
+    depends_on:
+      auth-postgres:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://auth-postgres:5432/authdb
+      SPRING_DATASOURCE_USERNAME: auth
+      SPRING_DATASOURCE_PASSWORD: auth
+      SPRING_JPA_HIBERNATE_DDL-AUTO: update
+      SPRING_SQL_INIT_MODE: always
+      JWT_SECRET: d3w4taxJB2qqTGa03FX56zaBcTs5cpQnsOFP9UkF/KI=
+
   patient-service:
     build:
       context: ./patient-service
@@ -102,3 +134,4 @@ services:
 volumes:
   patient-postgres-data:
   kafka-data:
+  auth-postgres-data:
