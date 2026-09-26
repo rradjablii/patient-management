@@ -83,6 +83,8 @@ services:
       SPRING_JPA_HIBERNATE_DDL-AUTO: update
       SPRING_SQL_INIT_MODE: always
       JWT_SECRET: d3w4taxJB2qqTGa03FX56zaBcTs5cpQnsOFP9UkF/KI=
+    ports:
+      - "4005:4005"
 
   patient-service:
     build:
@@ -127,6 +129,8 @@ services:
     container_name: api-gateway
     depends_on:
       patient-service:
+        condition: service_started
+      auth-service:
         condition: service_started
     ports:
       - "4003:4003"

@@ -32,4 +32,17 @@ public class AuthController {
         String token = tokenOptional.get();
         return ResponseEntity.ok(new LoginResponseDTO(token));
     }
+
+    @Operation(summary = "Validate token")
+    @GetMapping("/validate")
+    public ResponseEntity<Void> validateToken(@RequestHeader("Authorization") String header){
+        if(header == null || !header.startsWith("Bearer ")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        return authService.validateToken(header.substring(7))
+                ? ResponseEntity.ok().build()
+                : ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+
+    }
+
 }
