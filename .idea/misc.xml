@@ -5,6 +5,7 @@
     <file type="web" url="file://$PROJECT_DIR$/analytics-service" />
     <file type="web" url="file://$PROJECT_DIR$/auth-service" />
     <file type="web" url="file://$PROJECT_DIR$/billing-service" />
+    <file type="web" url="file://$PROJECT_DIR$/integration-test" />
     <file type="web" url="file://$PROJECT_DIR$/patient-service" />
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_21" default="true" project-jdk-name="ms-21" project-jdk-type="JavaSDK">
